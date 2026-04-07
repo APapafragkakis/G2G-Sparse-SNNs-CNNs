@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+
+# environments
+venv/
+
+# results/logs
+*.log
+results*/
+
+# large artifacts
+checkpoints/
+torch.Tensor
+
+# datasets (never commit)
+data/*
+!data/README.md
+
+# archives
+*.zip
+*.tar
+*.tar.gz
+*.gz
+
+# pytorch
+*.pt
+*.pth
