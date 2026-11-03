@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 setlocal EnableExtensions EnableDelayedExpansion
 
 REM =========================
@@ -29,7 +29,7 @@ set "SPARSEMODE=--sparsity_mode dynamic"
 REM datasets
 set "DATASET_LIST=cifar10 cifar100"
 
-REM p' grid (χωρίς 0, 0.75, 0.9)
+REM p' grid (without 0, 0.75, 0.9)
 set "P_LIST=0.05 0.15 0.25 0.35 0.5"
 
 REM DST configs (3 pruning x 2 growing = 6)

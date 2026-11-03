@@ -1,6 +1,6 @@
-numpy==2.3.5
+torch>=2.1
+torchvision>=0.16
 snntorch==0.9.4
-torch==2.9.1+cu128
-torchvision==0.24.1+cu128
+numpy
 tqdm>=4.66.0
 matplotlib>=3.8.0

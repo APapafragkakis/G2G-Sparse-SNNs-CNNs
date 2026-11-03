@@ -179,11 +179,11 @@ def build_model(model_name: str, p_inter: float, dataset: str, use_resnet: bool)
 
     if use_resnet and dataset in ["cifar10", "cifar100"]:
         cut_at = "layer1"
-        pool_hw = 4  # 32 * 4 * 4 = 512
+        pool_hw = 4  # layer1 has 16 channels: 16 * 4 * 4 = 256
 
         print(f"Loading FrozenTruncatedResNet (pretrained) for {dataset} | cut_at={cut_at} | pool_hw={pool_hw} ...")
         feature_extractor = FrozenTruncatedResNet(dataset=dataset, cut_at=cut_at, pool_hw=pool_hw)
-        feature_dim = feature_extractor.out_dim  # 512
+        feature_dim = feature_extractor.out_dim
         print(f"FrozenTruncatedResNet ready. feature_dim={feature_dim}")
 
     # --- Build SNN classifier ---
