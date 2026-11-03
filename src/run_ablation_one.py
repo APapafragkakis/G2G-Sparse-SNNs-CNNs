@@ -8,7 +8,8 @@ from intra_ablation import apply_intra_only_masks, restore_masks
 
 def load_checkpoint(model, ckpt_path, device):
     ckpt = torch.load(ckpt_path, map_location="cpu")
-    model.load_state_dict(ckpt["model_state_dict"])
+    # strict=False: ResNet checkpoints are saved without the frozen feature extractor weights
+    model.load_state_dict(ckpt["model_state_dict"], strict=False)
     return model.to(device)
 
 
@@ -19,10 +20,10 @@ def get_test_loader(args):
         _, test_loader = get_fashion_loaders(args.batch_size)
     elif args.dataset == "cifar10":
         from data.cifar10_100 import get_cifar10_loaders
-        _, test_loader = get_cifar10_loaders(args.batch_size)
+        _, test_loader = get_cifar10_loaders(args.batch_size, normalize=args.use_resnet)
     else:
         from data.cifar10_100 import get_cifar100_loaders
-        _, test_loader = get_cifar100_loaders(args.batch_size)
+        _, test_loader = get_cifar100_loaders(args.batch_size, normalize=args.use_resnet)
     return test_loader
 
 
@@ -40,6 +41,13 @@ def setup_dataset_globals(args):
     else:
         raise ValueError(f"Unknown dataset: {args.dataset}")
 
+    # Same run settings as the checkpoint (build_model and evaluate read these globals)
+    train.hidden_dim = args.hidden_dim
+    train.T = args.T
+    train.enc_mode = args.enc
+    train.enc_scale = float(args.enc_scale)
+    train.enc_bias = float(args.enc_bias)
+
 
 def main():
     args = parse_args()
@@ -47,7 +55,9 @@ def main():
 
     setup_dataset_globals(args)
     
-    model = build_model(args.model, args.p_inter).to(device)
+    model = build_model(args.model, args.p_inter, args.dataset, use_resnet=args.use_resnet).to(device)
+    if model.feature_extractor is not None:
+        model.feature_extractor = model.feature_extractor.to(device)
 
     # Use train.py's checkpoint naming logic
     ckpt_path = get_checkpoint_path(args)
