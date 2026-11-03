@@ -18,7 +18,9 @@ Full report: [REPORT.pdf](REPORT.pdf)
 
 A convolutional layer is a bipartite graph. Every input channel c and every output channel c′ is a node, and the kernel K(c′,c) is the edge between them.
 
-<img src="docs/figures/conv_as_graph.png" alt="Multi-channel convolution: a 4x6x6 input convolved with two 3x3 filters gives a 2x4x4 output" width="620">
+<img src="docs/figures/conv_as_graph.png" alt="Convolution as a graph: four input channels, two filters with one kernel per input channel, two output channels" width="620">
+
+Four input channels, two filters with one 3×3 kernel per input channel, and two output channels. The dashed edge I₄ → O₁ is ablated: its kernel is zero.
 
 The contribution of edge c → c′ at output position (x, y) is
 
